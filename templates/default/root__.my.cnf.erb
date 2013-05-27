@@ -1,0 +1,8 @@
+#
+# WARNING: This file is managed by chef
+#
+[client]
+user = root
+password = <%= @node['percona']['server_root_password'] %>
+[mysql]
+prompt=(\u@\h) [\d]>\_
