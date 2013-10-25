@@ -62,3 +62,11 @@ execute "assign-root-password-localhost" do
   only_if "/opt/local/bin/mysql --no-defaults -u root -e 'show databases;'"
   action :run
 end
+
+#
+# Drop 'test' database
+#
+execute "drop-test-database" do
+  command "echo y | /opt/local/bin/mysqladmin drop test"
+  only_if "test -d /var/mysql/test"
+end
