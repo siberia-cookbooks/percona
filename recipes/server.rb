@@ -57,8 +57,8 @@ execute "assign-root-password-socket" do
 end
 
 execute "assign-root-password-localhost" do
-  command "/opt/local/bin/mysql -u root mysql -e \"SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('#{node['percona']['server_root_password']}');\""
-  Chef::Log.info("/opt/local/bin/mysql -u root mysql -e \"SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('#{node['percona']['server_root_password']}');\"")
-  only_if "/opt/local/bin/mysql --no-defaults -u root -e 'show databases;' "
+  command "/opt/local/bin/mysqladmin password '#{node['percona']['server_root_password']}'"
+  Chef::Log.info("/opt/local/bin/mysqladmin password '#{node['percona']['server_root_password']}'")
+  only_if "/opt/local/bin/mysql --no-defaults -u root -e 'show databases;'"
   action :run
 end
