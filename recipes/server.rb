@@ -14,7 +14,7 @@ end
 include_recipe "percona::client"
 include_recipe "percona::toolkit"
 
-service "percona-server" do
+service node['percona']['service_name'] do
   action [ :enable ]
 end
 
