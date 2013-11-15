@@ -8,10 +8,11 @@
 #
 
 default['percona'] = {
-  'percona_version' => '55',
+  'version'=> '5.6.13',
+  'percona_version' => '56',
   'ssl' => '1',
   'bind_address' => '127.0.0.1',
-  'service_name' => 'pkgsrc/percona-server',
+  'service_name' => 'pkgsrc/percona',
   'server_root_password' => 'egMacpadvedjifsAsjobGiopwagshErm',
   'key_buffer_size' => '170M',
   'myisam_sort_buffer_size' => '32M',

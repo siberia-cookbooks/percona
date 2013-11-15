@@ -8,6 +8,6 @@
 #
 
 package "percona-client" do
+  version node['percona']['version']
   action :install
 end
-
