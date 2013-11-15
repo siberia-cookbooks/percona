@@ -25,13 +25,10 @@ directory "/var/mysql" do
   mode "0750"
 end
 
-execute "mysql_install_db" do
-  command "/opt/local/bin/mysql_install_db -user mysql --datadir=/var/mysql --skip-name-resolve --force"
-  not_if { ::File.exists?("/var/mysql/mysql/user.frm") }
-end
-
-service node['percona']['service_name'] do
-  action [ :enable ]
+directory "/var/log/mysql" do
+  owner "mysql"
+  group "mysql"
+  mode "0755"
 end
 
 template "/opt/local/etc/my.cnf" do
@@ -41,11 +38,22 @@ template "/opt/local/etc/my.cnf" do
   mode "0640"
 end
 
-directory "/var/log/mysql" do
-  owner "mysql"
-  group "mysql"
-  mode "0755"
+template "/root/.my.cnf" do
+  source "root__.my.cnf.erb"
+  owner "root"
+  group "root"
+  mode "0600"
 end
+
+execute "mysql_install_db" do
+  command "/opt/local/bin/mysql_install_db -user mysql --datadir=/var/mysql --skip-name-resolve --force"
+  not_if { ::File.exists?("/var/mysql/mysql/user.frm") }
+end
+
+service node['percona']['service_name'] do
+  action [ :enable ]
+end
+
 
 #
 # Needed for flushing privileges post removing of users
@@ -72,17 +80,19 @@ execute "assign-root-password-localhost" do
   action :run
 end
 
-template "/root/.my.cnf" do
-  source "root__.my.cnf.erb"
-  owner "root"
-  group "root"
-  mode "0600"
-end
-
 #
 # Drop 'test' database
 #
 execute "drop-test-database" do
   command "echo y | /opt/local/bin/mysqladmin drop test"
   only_if "test -d /var/mysql/test"
+end
+
+#
+# Import Timezone Data
+#
+execute "import-timezone-data" do
+  command "/opt/local/bin/mysql_tzinfo_to_sql /usr/share/lib/zoneinfo | mysql -u root mysql"
+  only_if "mysql -e \"show databases;\" | grep mysql"
+  not_if "mysql -e \"select * from mysql.time_zone;\" | grep leap_seconds"
 end
