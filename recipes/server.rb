@@ -12,17 +12,26 @@ package "percona-server" do
 end
 
 include_recipe "percona::client"
-include_recipe "percona::toolkit"
+
+pkgsrc_version=%x{cat /etc/pkgsrc_version | grep release | cut -d' ' -f2}
+case pkgsrc_version
+when "2013Q1", "2013Q2"
+  include_recipe "percona::toolkit"
+end
+
+directory "/var/mysql" do
+  owner "mysql"
+  group "mysql"
+  mode "0750"
+end
+
+execute "mysql_install_db" do
+  command "/opt/local/bin/mysql_install_db -user mysql --datadir=/var/mysql --skip-name-resolve --force"
+  not_if { ::File.exists?("/var/mysql/mysql/user.frm") }
+end
 
 service node['percona']['service_name'] do
   action [ :enable ]
-end
-
-template "/root/.my.cnf" do
-  source "root__.my.cnf.erb"
-  owner "root"
-  group "root"
-  mode "0600"
 end
 
 template "/opt/local/etc/my.cnf" do
@@ -61,6 +70,13 @@ execute "assign-root-password-localhost" do
   Chef::Log.info("/opt/local/bin/mysqladmin password '#{node['percona']['server_root_password']}'")
   only_if "/opt/local/bin/mysql --no-defaults -u root -e 'show databases;'"
   action :run
+end
+
+template "/root/.my.cnf" do
+  source "root__.my.cnf.erb"
+  owner "root"
+  group "root"
+  mode "0600"
 end
 
 #
