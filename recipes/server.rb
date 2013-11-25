@@ -54,6 +54,15 @@ service node['percona']['service_name'] do
   action [ :enable ]
 end
 
+ruby_block "wait for percona to come up" do
+  block do
+    Timeout::timeout(60) do
+      until system("ls /tmp/mysql.sock")
+        sleep 1
+      end
+    end
+  end
+end
 
 #
 # Needed for flushing privileges post removing of users
