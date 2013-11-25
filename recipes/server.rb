@@ -46,7 +46,7 @@ template "/root/.my.cnf" do
 end
 
 execute "mysql_install_db" do
-  command "/opt/local/bin/mysql_install_db -user mysql --datadir=/var/mysql --skip-name-resolve --force"
+  command "/opt/local/bin/mysql_install_db --user=mysql --datadir=/var/mysql --skip-name-resolve --force"
   not_if { ::File.exists?("/var/mysql/mysql/user.frm") }
 end
 
