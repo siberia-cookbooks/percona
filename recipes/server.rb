@@ -15,7 +15,7 @@ include_recipe "percona::client"
 
 pkgsrc_version=%x{cat /etc/pkgsrc_version | grep release | cut -d' ' -f2}.strip
 case pkgsrc_version
-when "2013Q1", "2013Q2"
+when "2013Q1", "2013Q2", "2013Q3"
   include_recipe "percona::toolkit"
 end
 
