@@ -89,6 +89,13 @@ execute "assign-root-password-localhost" do
   action :run
 end
 
+execute "assign-root-password-127.0.0.1" do
+  command "/opt/local/bin/mysqladmin --no-defaults -h 127.0.0.1 password '#{node['percona']['server_root_password']}'"
+  Chef::Log.info("/opt/local/bin/mysqladmin --no-defaults -h 127.0.0.1 password '#{node['percona']['server_root_password']}'")
+  only_if "/opt/local/bin/mysql --no-defaults -h 127.0.0.1 -u root -e 'show databases;'"
+  action :run
+end
+
 #
 # Drop 'test' database
 #
