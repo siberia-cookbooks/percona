@@ -6,5 +6,5 @@ rvm:
   - 2.0.0
   - 2.1.0
 script:
- - BUNDLE_GEMFILE=test/support/Gemfile bundle exec rake knife
- - BUNDLE_GEMFILE=test/support/Gemfile bundle exec rake foodcritic
+ - bundle exec rake knife
+ - bundle exec rake foodcritic
