@@ -63,4 +63,7 @@ e.g.
 
 License and Authors
 -------------------
-Authors: TODO: List authors
+
+Authors:
+
+ * Jacques Marneweck <jacques@powertrip.co.za> (http://www.jacquesmarneweck.com/)
