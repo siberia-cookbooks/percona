@@ -2,7 +2,7 @@
 # Cookbook Name:: percona
 # Recipe:: default
 #
-# Copyright 2013, Jacques Marneweck
+# Copyright 2013-2014, Jacques Marneweck
 #
 # All rights reserved - Do Not Redistribute
 #
@@ -13,7 +13,11 @@ end
 
 include_recipe "percona::client"
 
-pkgsrc_version=%x{cat /etc/pkgsrc_version | grep release | cut -d' ' -f2}.strip
+cmd=Mixlib::ShellOut.new('cat /etc/pkgsrc_version | grep release | cut -d\' \' -f2')
+cmd.run_command
+cmd.error!
+pkgsrc_version = cmd.stdout.strip
+
 case pkgsrc_version
 when "2013Q1", "2013Q2", "2013Q3"
   include_recipe "percona::toolkit"
