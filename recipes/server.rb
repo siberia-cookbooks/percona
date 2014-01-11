@@ -105,7 +105,7 @@ end
 # Drop 'test' database
 #
 execute "drop-test-database" do
-  command "echo y | /opt/local/bin/mysqladmin drop test"
+  command "/opt/local/bin/echo y | /opt/local/bin/mysqladmin -p'#{node['percona']['server_root_password']}' drop test"
   only_if "test -d /var/mysql/test"
 end
 
